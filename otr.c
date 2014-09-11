@@ -293,7 +293,7 @@ int init_otr() {
   if (err) {
     printf("failed (%s)\n", gcry_strerror(err));
     b_echostr_s();
-    printf("[OTR] generating new private key\n");
+    printf("[OTR] generating new private key, check status with 'o'\n");
     err = otrl_privkey_generate_start(userstate, conn->username, otr_proto, &key_gen_newkey);
     if (!err) {
       int ret = pthread_create(&keygen_thread, NULL, generate_key, key_gen_newkey);
@@ -340,6 +340,8 @@ int init_otr() {
 
   free(instagfile);
 
+  conn->otr_instag = otrl_instag_find(userstate, conn->username, otr_proto);
+
   return 0;
 }
 
@@ -375,7 +377,10 @@ int otr_imcomm_im_send_message(const char *sn, const char *fullmsg) {
                                 } else if (newmsg != NULL) {
         				imcomm_im_send_message(conn->conn, sn, newmsg, 0);
                                         otrl_message_free(newmsg);
-					return(0);
+					if (buddy->otr_context->msgstate == OTRL_MSGSTATE_ENCRYPTED)
+						return(0);
+					else
+						return(1);
                                 }
                         }
                 }

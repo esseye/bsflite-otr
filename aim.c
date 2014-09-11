@@ -375,7 +375,10 @@ buddy_online(void *c, const char *who)
 	newbuddy->away = 0;
 	newbuddy->idle = 0;
 	newbuddy->otr = 0;
-	newbuddy->otr_context = NULL;
+	newbuddy->otr_context = otrl_context_find(userstate, newbuddy->sn,
+					conn->username, otr_proto,
+					OTRL_INSTAG_BEST, 1, 0,
+					NULL, NULL);
 
 	conn->buddiesonline++;
 

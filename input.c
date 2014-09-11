@@ -62,9 +62,9 @@ parse_input(void)
 		{"w", 1, input_show_buddies},
 		{"z!", 2, input_reload_profile},
 		{"?", 1, input_show_help},
-		{"O", 1, input_show_otr},
-		{"o", 1, input_stop_otr},
-		{"S", 1, input_send_smp},
+		{"o", 1, input_show_otr},
+		{"O", 1, input_stop_otr},
+		{"s", 1, input_send_smp_response},
 		{NULL, 0, NULL}
 	};
 
@@ -365,6 +365,9 @@ input_show_help(char *arg)
 	printf("   A<sn>........: get away message\n");
 	printf("   P<sn>........: get profile\n");
 	printf("   R![sn].......: manually reconnect [as [sn]]\n");
+	printf("   s[sn] <msg>..: respond to OTR SMP request\n");
+	printf("   O[sn]........: shut down OTR session with buddy\n");
+	printf("   o............: check OTR key generation status\n");
 	printf("   z!...........: reload profile and away messages\n");
 	printf("   q!...........: quit\n");
 }
@@ -677,7 +680,6 @@ void input_stop_otr(char *arg) {
 			otrl_message_disconnect_all_instances(userstate, &ui_ops, NULL,
 			conn->username, otr_proto, buddy->sn);
 			buddy->otr = 0;
-			buddy->otr_context = NULL;
 			printf("[OTR] Ending OTR session with %s\n", buddy->sn);
 		} else {
 			printf("[OTR] No OTR session found with %s\n", buddy->sn);
@@ -688,7 +690,7 @@ void input_stop_otr(char *arg) {
 }
 
 
-void input_send_smp(char *arg) {
+void input_send_smp_response(char *arg) {
         char *msg, *temp, *sn;
 
 	if (conn->conn == NULL)

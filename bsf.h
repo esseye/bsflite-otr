@@ -89,6 +89,7 @@ struct Conn {
 	int             colors;
 	int             auto_reconnect;
 	int             otr;
+	OtrlInsTag	*otr_instag;
 	struct AwayMessages *awaymsgs;
 };
 
