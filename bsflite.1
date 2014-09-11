@@ -1,0 +1,165 @@
+.TH bsflite 1 "October 19th, 2008" "version 0.85"
+.SH NAME
+bsflite \- Minimalist AIM(R) client
+.SH SYNOPSIS
+.B bsflite
+.SH DESCRIPTION
+\fIBSFlite\fR is a very light and minimal client for AOL(R)'s Instant Messenger(TM)
+service that works (or should work) under most varieties of UNIX. It
+features only the basics that every client should have, that is sending and
+receiving messages, adding and deleting buddies and viewing the buddy list,
+with other features included for convenience and simplicity.
+.SS "Running bsflite"
+\fIBSFlite\fR runs without any command-line options or configuration files.
+Simply execute \fBbsflite\fR at a shell prompt. It will prompt for your
+AIM(R) screen name and password and connect. Note that these can be stored
+along with other options in a configuration file, detailed below.
+.PP
+Once connected, you may enter commands at the prompt. Most commands are either
+one or two characters long, and are meant to be run without a space in between
+the command and the argument. For example, to send a message, type:
+.TP
+m\fIscreename\fR This is my message.
+.PP
+That is, the screen name immediately follows the \fIm\fR command, and is
+entered in lowercase without any spaces. This is the general convention for
+screen names in bsflite in order to allow the parser to detect where your
+message begins.
+.SS "Commands"
+.TP
+.B h, ?
+Displays a list of commands.
+.TP
+.B w, ws, wf
+Displays the buddy list. \fBws\fR displays the list sorted by status, with
+indicators next to the screen name to indicate this. Status is indicated by
+[o], online and active, [i], idle for more than 10 minutes, [a], away for less
+than 10 minutes, and [g], gone with away message for over 10 minutes (idle).
+\fBwf\fR displays the buddy list sorted in alphabetical order regardless of
+status, and additionally displays buddies' idle times. Note that \fBw\fR is an
+alias for \fBws\fR.
+.TP
+.B m\fIscreenname\fR \fImessage\fR
+Sends \fImessage\fR to \fIscreenname\fR, where \fIscreenname\fR is entered in
+lowercase and without spaces.
+.TP
+.B r
+Replies to the last person whom you messaged or who messaged you. This is a
+command alias for \fBm\fR that automatically enters the appropriate screen
+name and a space so that you may begin typing the message immediately.
+.TP
+.B p\fIscreenname\fR
+Pastes a block of text to \fIscreenname\fR. After pressing return, you may
+paste your text. BSFlite will begin sending once the send buffer is full, so
+multiple lines may be sent in one single message. Type '.' in a line by itself
+to end paste mode and send whatever is left in the buffer. Press Ctrl-X to
+leave paste mode without sending what is in the buffer. Note that text may
+have already been sent if you have entered any text in paste mode, even if you
+press Ctrl-X.
+.TP
+.B L, l\fIscreenname\fR, lg
+Displays the last 20 lines from the last person to message you (\fBL\fR) or
+\fIscreenname\fR (\fBl\fR). This information is stored in log files detailed
+below. If \fIsingle_log\fR is turned on in the configuration file, L or lg
+display the last 20 lines of the single log file.
+.TP
+.B a\fIscreenname\fB, d\fIscreenname\fR
+Adds or deletes, respectively, \fIscreenname\fR from your buddy list.
+.TP
+.B I, i\fIscreenname\fB, A\fIscreenname\fB, P\fIscreenname\fB
+Retrieves information about \fIscreenname\fR (or, for \fBI\fR, the last person
+who sent you a message). \fBI\fR and \fBi\fR retrieve the user's away message
+and profile, and if the user is in your buddylist it'll also show the user's
+idle time. \fBA\fR and \fBP\fR can be used to retrieve only the away message
+and profile, respectively.
+.TP
+.B g\fImessage\fR (if not away), \fBg\fR (if away)
+Sets an away message if not away, and removes the away message if away.
+.TP
+.B G, G\fInum\fR
+Displays a numbered list of pre-defined away messages (see \fIFILES\fR below)
+when run without an argument, and sets the away message when run with a
+number. Use \fBg\fR to remove this away message.
+.TP
+.B v
+Toggles invisibility on and off.
+.TP
+.B z!
+Reloads your profile and list of pre-defined away messages (see \fIFILES\fR
+below).
+.TP
+.B q!
+Exits bsflite.
+.SS "Configuration file"
+The configuration file is located in \fI~/.bsflite/config\fR and can contain
+any of the following options:
+.TP
+.B username \fIusername\fR
+Your screen name.
+.TP
+.B password \fIpassword\fR
+Your password.
+.TP
+.B squelchconnect \fItrue/false\fR
+Hide notifications when a buddy signs on or off. (Default: false)
+.TP
+.B squelchidle \fItrue/false\fR
+Hide notifications when a buddy becomes idle or is back from being idle.
+(Default: false)
+.TP
+.B squelchaway \fItrue/false\fR
+Hide notifications when a buddy sets or unsets an away message. (Default:
+false)
+.TP
+.B respond_idle_only \fItrue/false\fR
+Send an auto-response with your away message only when an away message is set
+and you are idle. (Default: false)
+.TP
+.B report_idle \fItrue/false\fR
+Report idle times to the AIM server. (Default: true)
+.TP
+.B netspeak_filter \fItrue/false\fR
+Enable or disable the "netspeak" and typo filter, which translates expressions
+like "u"
+into "you," and other such things. This is a bad idea if you write or receive
+messages in any language other than English. A complete list of replacements
+can be viewed in the source file \fIcleaner.c\fR. (Default: false)
+.TP
+.B oscarport \fIport\fR
+Connect to the AIM server using port \fIport\fR. (Default: 5190)
+.TP
+.B proxy, proxyport, proxytype
+Connect through a proxy. \fBproxy\fR specifies the IP address or hostname of
+the proxy server, \fBproxyport\fR is the proxy port number and \fBproxytype\fR
+is one of \fIsocks5\fR or \fIhttps\fR. Authentication is not currently supported.
+.TP
+.B set_window_title \fItrue/false\fR
+Set the xterm/screen window title with "bsflite: screen name." (Default:
+false)
+.TP
+.B colors \fItrue/false\fR
+Enables colors. (Default: false)
+.TP
+.B single_log \fItrue/false\fR
+Logs to a single file (log/log). (Default: false)
+.PP
+Lines beginning with '#' are ignored.
+.SH FILES
+.TP
+.B ~/.bsflite/config
+Configuration file
+.TP
+.B ~/.bsflite/profile
+User profile, written in HTML.
+.TP
+.B ~/.bsflite/awaymessages
+Pre-defined away messages, one per line. Multi-line away messages may be
+entered by entering \fI<br>\fR between lines.
+.TP
+.B ~/.bsflite/log/\fIscreenname\fB.log
+Log of all conversations with \fIscreenname\fR, used for \fBl\fR commands.
+.TP
+.B ~/.bsflite/log/log
+Log if \fIsingle_log\fR is turned on.
+.SH AUTHOR
+Claudio Leite

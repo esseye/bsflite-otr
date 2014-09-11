@@ -1,0 +1,9 @@
+#!/bin/sh
+
+#for i in *.c *.h; do
+#	indent -i2 -lp $i
+#done
+
+for i in *.c *.h; do
+	indent -lp $i
+done

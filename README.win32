@@ -1,0 +1,33 @@
+BSFlite for Win32 and DOS
+-------------------------
+
+WARNING!!
+
+BSFlite's non-UNIX ports are not as well-tested, and may suffer from ugly bugs
+that I may not know about.
+
+** Note: as of 0.80, the terminal issues have been fixed, as far as I know.
+
+I do not consider these ports to be as "solid" as the UNIX version. If you're
+stuck with Windows and like BSFlite, your best bet is to use bsflite on an
+UNIX server through PuTTY.
+
+ These are native ports compiled from the same source tree as the original.
+Both binaries are cross-compiled from NetBSD/i386 using Mingw32 (Win32) and
+DJGPP (DOS). The DOS port requires a 386 or above and a packet driver.
+Please see a site such as www.fdisk.com for more information on DOS internet.
+
+Due to differences between UNIX and DOS/Win32, the configuration filenames
+are as follows:
+
+config.txt	~/.bsflite/config	(SN/password configuration)
+profile.htm	~/.bsflite/profile	(profile)
+buddies.txt	~/.bsflite/buddies	(buddy list)
+icon.bin	~/.bsflite/icon		(buddy icon)
+awaymsgs.txt	~/.bsflite/awaymessages (away messages)
+
+These should go in the same directory as the binary.
+
+Enjoy!
+
+-Claudio Leite
