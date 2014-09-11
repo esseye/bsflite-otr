@@ -1,0 +1,324 @@
+BSFlite ChangeLog
+
+0.85 - 9/10/2010
+
+ * Pretends to be iChat instead of an old version of AIM,
+   due to AIM blocking older clients
+
+ * Please note that bsflite is no longer in active development.
+   Any updates at this point will be minor. Since I do not use
+   AIM myself these days I am interested in finding somebody
+   interested in taking over bsflite development.
+
+0.84 - 10/19/2008
+
+ * Removed rate limit warning messages
+
+ * Added missing proxy information to manual page
+ 
+ * Fixed bug introduced in 0.83 where DOS/Win32 did not get any input
+
+ * Makefile now properly uses 'make -C' for building subdirectories
+
+ * miscellaneous DJGPP cleanups
+
+0.83 - 12/12/2007
+
+ * Log to a single file (option "single_log")
+   To review, use the command "lg"
+
+ * Added BeOS (R5) support.
+
+ * Ported to AmigaOS w/ GeekGadgets.
+
+ * Added 'v' command to set/unset invisible status.
+
+ * Fixed a mysterious bug where buddies would sign off repeatedly
+
+0.82 - 11/07/2006
+
+ * Added port to Watcom C for Win32, which exposed a bug
+   in how I implemented callbacks (fixed).
+
+ * Fixed small bug where idle time was interpreted as
+   an away message for certain users.
+
+ * Inserts newline if user's away message is blank.
+
+ * Added R! command to manually reconnect.
+
+ * Added auto_reconnect config option.
+ 
+ * Cleans up after itself on quit.
+   (i.e. no more memory leaks on exit)
+   Added imcomm_delete_handle() and imcomm_delete_handle_now().
+
+ * Added 'idletime' config option to set when bsflite considers
+   the user to be idle. (thanks to Dan Ponte for the patch)
+
+ * Changed 'll' to 'L,' which is an expansion alias like 'I'
+   and 'r.' 'll' still works.
+
+ * Created an actual manpage.
+
+ * Code cleanup: rewrote input.c using callbacks.
+                 wrote a new config file parser.
+
+ * Profile display now includes idle time if user is in buddy list.
+
+ * Changed character set on profile & away messages to iso-8859-1
+
+ * Many improvements to color support, including Windows support.
+   Can now be turned on and off via config directive 'colors'
+
+ * Buddies are now marked offline in the log files when quitting bsflite.
+
+ * Display version information when bsflite starts
+
+ * Fixed bugs when displaying logs containing newlines
+
+0.81p2 - 02/13/2006
+
+ * For some reason some IM's contain an extra bit of information
+   that imcomm choked on, so certain incoming messages would not
+   be shown. I made tlv_split() in imcomm ignore the number of tlv's
+   the server tells us, and this fixed it.
+
+0.81p1 - 01/31/2006
+
+ * Fixed a bug that made AOL's Triton client ignore incoming IM's
+   from bsflite.
+
+0.81 - 01/08/2006
+
+ Changes by neutronscott (thanks):
+   * Wordwrap works with <br> on incoming messages.
+   * Fixed buddy list size bug when squelch_connect is on
+   * Moved beep_on_incoming from compile-time to a config option
+
+ * Outgoing messages are displayed with HTML removed.
+
+ * HTML links are now displayed in-line
+
+ * Fixed most problems relating to buddy list management.
+
+ * Added raw input mode, toggled by ctrl-R, to input HTML characters.
+
+ * Added command 'z!' to reload away messages and profile while running.
+
+ * Added 'p' command for pasting messages.
+
+ * Removed the 'b' command due to multiple reports of crashes.
+
+ * Made improvements to the wordwrap routine, which should fix crashes
+   when pasting or receiving a long link or other long, uninterrupted
+   line.
+
+ * Replaced getchar() with read(), eliminating the odd bug when pasting a
+   line - you don't need to press another key to get display the line.
+
+ * Added option "set_window_title" that sets the xterm/screen window title
+   with your screen name.
+
+ * Added 'I' command to request profile of the last person who sent you
+   a message.
+
+ * 'wf' command now displays idle times. This was actually sent to me in a
+   patch by Matt Walters a long time ago, but I just cleaned it up and
+   implemented it now.
+
+ * New config option "oscarport"
+
+ * Fixed some memory leaks in bsflite and imcomm. Thanks to Toby Peterson for
+   submitting this patch.
+
+ * Added support for connecting through proxy servers.
+   Added to config file:
+    - proxy <proxy server> - the hostname or IP of the server
+    - proxyport <port> - port on which the proxy is listening
+    - proxytype <type> - currently either socks5 or https
+
+   Authentication should be added soon.
+
+ * Made timestamps a run-time option. Add 'timestamps false' to
+   the config file.
+
+0.80 - 04/13/2005
+
+ * Changed keepalive messages to FLAP channel 0x05 messages, as recommended.
+
+ * Re-implemented idle time reporting. Any keystroke in bsflite now resets
+   your idle time, rather than only on sending a message.
+
+ * New option "respond_idle_only" to send away message auto-response only
+   when away and idle.
+
+ * Fixed the terminal line erasing problem previously detailed in the README
+   both in UNIX (using vt100 sequences), Windows (using console functions)
+   and DOS (using conio functions). Plan 9 is unaffected since the rio
+   terminal properly supports reverse line wrap.
+
+ * Screen names longer than 16 characters are trimmed to the first
+   13 characters plus "..." in the buddy list display. Use 'wf' to
+   see the entire name. This is necessary now with @mac.com and
+   @thematrixonline.com accounts.
+
+ * New command 'G' : write away messages in ~/.bsflite/awaymessages,
+   one per line, and use 'G' to set them.
+
+ * Finally added server-side buddy lists. Buddy add/delete now stores the
+   information on the server. If you have a buddies file, run this
+   new version with it once, then delete it.
+
+ * Optional "netspeak cleaner" - see cleaner.c and config file
+
+ * Cleaned up and sped up login sequence.
+
+ * Fixed a mysterious bug where mobile users would disappear from the
+   buddy list even though they were online.
+
+ * imcomm now supports sending more than one packet at a time, which
+   seems to be how other clients do some things. The fetch awaymsg/profile
+   command now takes advantage of this, which seems to improve the rate
+   limit situation a bit. Also, the 'b' command works most of the time
+   without triggering a rate limit warning.
+
+ * Buddy list display now adjusts with screen size.
+
+ * Added a configuration file. See config-example for details.
+
+ * Changed default paths to ~/.bsflite/[config,log,profile,buddies,icon]
+ 
+ * Fixed the endlessly repeating error messages on certain platforms.
+
+ * l command now shows the last 20 lines instead of 10.
+
+ * Implemented MD5-based login in IMComm instead of the old, "roasted"
+   password algorithm. This improves things on three fronts:
+    - your password is no longer sent in plaintext
+    - you can login with a @mac.com account
+    - you can login with an ICQ UIN
+   This is the way the official client has done things for a while. I used
+   MD5 routines developed by L. Peter Deutsch (md5.c, md5.h in imcomm/)
+   for this, at least until I become inspired enough to write my own.
+
+0.73 - 02/06/2005
+
+ * Fixed a small compilation bug on 64-bit architectures.
+
+ * Now shows a different prompt when away message is set.
+
+ * Profile/away display now at least shows line breaks, so things are a bit
+   easier to read. It's still a little buggy as before, and no other HTML is
+   supported.
+
+ * HTML stripper now strips &nbsp;
+
+ * Ported to Bell Labs' Plan 9 operating system. I believe this is the first
+   AIM client for this platform, so it's quite neat. Thanks a bunch to Thomas
+   Miller for giving me the idea and support, and Takeshi Yamanashi and the
+   rest of tip9ug.jp for providing a Plan 9 system to use while I got my own
+   system set up (and for helping me get that set up, too). Thanks!
+
+ * Added a 5-minute keepalive to IMComm by default.
+
+ * Added two new commands: A and P, to get just the away message or profile
+   for a user.
+
+ * Finally displays error message when IM is sent to a user who is not
+   online.
+
+ * Added support for talking to users with @mac.com accounts.
+
+ * Buddy icon support (and accompanying changes in imcomm's structure)
+   added. This is still somewhat experimental.
+
+ * Support added for sending and receiving messages to and from ICQ users.
+   ICQ users can add your screen name to your contact list, and you can add
+   their numeric UIN's to your buddy list.
+
+0.72 - 11/22/2004
+
+ * Tab completion now works for 'i' and 'l' commands
+
+ * New command 'b' to scan through buddy list and fetch all away messages.
+   (currently triggers rate limit - a fix for this is planned...)
+
+ * Changed format of profile and away message display to acommodate the 'b'
+   command.
+
+ * Implemented away message auto-response (IMComm updated to support this,
+   too.) This'll send a message the first time someone sends you an IM while
+   you're away.
+
+ * Rate limit excess information. If you exceed the rate limit (which happens
+   if you request too many users' information, for example, since one request
+   sends out two commands to the server a bit quickly. Again, this is being
+   worked on...) the prompt changes to <!> as a warning, and then to <!!> if
+   you exceeded it. While at <!!> you cannot send any messages/commands. Note
+   that the server does not tell us when you've been cleared, so the prompt
+   will remain <!!> until you send a message after being cleared.
+
+0.71 - 07/19/2004
+
+ * MAJOR enhancements to IMComm, which will now be released also as a
+   standalone library. Most notable fixes include a few memory errors, a
+   general code cleanup (got rid of old nasty type conversions and created
+   a new packet-building structure) and the reintroduction of a full
+   packet at a time receiving option. This is default on ALL platforms.
+   So far, I've found it to be noticeably faster than one-byte-at-a-time
+   mode, and is even faster than the old full packet code.
+
+ * Ignores SIGTSTP (ctrl-Z)
+
+ * Minor format changes. Prompt is now '::'.
+
+0.70 - 06/11/2004
+
+ * New buddy list display shows two buddies per line, separating
+   into sections (online, idle, away, gone (away and idle))
+
+ * HTML stripper now strips off \r, meaning some profiles and away messages
+   are more or less readable now (especially those from Trillian users)
+
+0.60 - never released
+
+ * Buddy list is now sorted by alphabetical order in the structure.
+   'wf' will display it in this order, 'ws' will display it sorted by online
+   status (though it'll also be alphabetized within the sections.)
+
+ * 'ws' is now the default for 'w'
+
+ * Began fixing braindead code in aim.c
+
+ * Cleanup in input.c, moved buddy list functions to out.c
+
+0.52 - 01/05/2004
+
+ * New command 'ws' shows buddy list sorted by online status.
+
+ * Buddy signoff routines now properly free all the data in the struct.
+   (which reminds me, I need to rewrite some braindead code in that file.)
+
+ * Improved buddy list display now shows properly formatted screen names.
+
+ * Fixed a bug in input routine that prevented 8-bit characters from being
+   entered.
+
+ * Added configurable formats in bsf.h. Right now, you can change the prompt
+   as well as an HTML format (font, colors) for outgoing messages.
+
+0.51 - 12/31/2003
+
+ I've lost track of all the changes I've made (it's been a while!), but the
+ most significant I can remember are:
+
+ * IMComm no longer reads the entire AIM packet at once. After receiving 
+   the header's 6 bytes, it then reads each byte as it comes in. I have not 
+   noticed any performance losses after changing this. This should make 
+   slower connections not as noticeable - I tested it on a cell phone modem 
+   and it worked well.
+
+ * ANSI colors - yes, I admit it, I added colors. You may enable them in
+   the Makefile. I did not finish making the color scheme, so it's up to you; 
+   the format is specified in colors.h.

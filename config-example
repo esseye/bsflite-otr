@@ -1,0 +1,126 @@
+##
+## Configuration file for bsflite
+##
+## This is read from:
+## $HOME/.bsflite/config (UNIX)
+## $home/lib/bsflite/config (Plan 9)
+## config.txt (DOS/Windows)
+##
+## All lines beginning with '#' are ignored.
+##
+## username <username>		(default: ask at startup)
+##  * Your screen name
+
+#username mysn
+
+##
+## password <password>		(default: ask at startup)
+##  * Your password
+
+#password mypw
+
+##
+## squelchconnect [true/false]	(default: false)
+##  * Omit buddy online/offline notifications
+
+#squelchconnect true
+
+##
+## squelchaway [true/false]	(default: false)
+##  * Omit buddy away/unaway notifications
+
+#squelchaway true
+
+##
+## squelchidle [true/false]	(default: false)
+##  * Omit buddy idle/unidle notifications
+
+#squelchidle true
+
+##
+## respond_idle_only		(default: false)
+##  * Auto-respond to messages only when away and idle,
+##    as opposed to simply away.
+
+#respond_idle_only true
+
+## 
+## report_idle			(default: true)
+##  * Report idle time to server - any keystroke
+##    resets your idle time.
+
+#report_idle false
+
+##
+## timestamps			(default: true)
+##  * Turns on/off timestamps.
+
+#timestamps false
+
+##
+## netspeak_filter		(default: false)
+##  * Clean up netspeak and typos in outgoing and
+##    incoming messages. Probably not a good idea
+##    if you write in a language other than English.
+
+#netspeak_filter true
+
+##
+## oscarport			(default: 5190)
+##  * Sets the port used to connect to the AIM
+##    service.
+##
+
+#oscarport 8080
+
+## proxy			(default: none)
+##  * Sets IP or hostname of proxy to use.
+##    Further:
+##     - proxyport <port> : port on which to connect
+##     - proxytype <type> : either socks5 or https
+
+#proxy 127.0.0.1
+#proxyport 1080
+#proxytype socks5
+
+##
+## set_window_title		(default: false on UNIX/true on Win32)
+##  * If true, sets the xterm or screen window
+##    title with "bsflite: yourscreenname"
+##    Only activated if terminal type is
+##    "xterm" or "screen"
+
+#set_window_title true
+
+##
+## bell_on_incoming		(default: false)
+##  * Sound a beep when a message comes in.
+##
+
+#bell_on_incoming true
+
+## idletime			(default: 600)
+##  * Sets time at which bsflite considers you
+##    to be idle.
+
+#idletime 300
+
+##
+## colors			(default: false)
+##  * Toggles ANSI color.
+
+#colors true
+
+##
+## auto_reconnect		(default: 0)
+##  * Number of seconds to wait before automatically
+##    reconnecting. Setting to 0 turns this off.
+##
+
+#auto_reconnect 10
+
+##
+## single_log			(default: false)
+##  * Logs all conversations to a single log file
+
+#single_log true
