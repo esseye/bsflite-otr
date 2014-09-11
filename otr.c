@@ -36,7 +36,7 @@ static void otr_inject_msg_cb(void *data, const char *accountname, const char *p
 	snprintf(final, len, "%s%s%s", prefix, message, suffix);
 #ifdef DEBUG
 	b_echostr_s();
-	printf("\n[OTR] Debug inject_msg to %s: %s\n", recipient, final);
+	printf("\n[OTR] debug inject_msg to %s: %s\n", recipient, final);
 #endif
 	imcomm_im_send_message(conn->conn, recipient, final, 0);
 	free(final);
@@ -175,8 +175,45 @@ static void otr_handle_msg_event_cb(void *data, OtrlMessageEvent msg_event,
 #ifdef DEBUG
 	printf("\n");
 	b_echostr_s();
-	printf("[OTR] Debug: msg_event %d - %s (%s)\n", msg_event, message,
-		gcry_strerror(err));
+	printf("[OTR] debug  msg_event from %s: %d - %s (%s)\n", context->username,
+		msg_event, message, gcry_strerror(err));
+#else
+	if (msg_event == OTRL_MSGEVENT_RCVDMSG_UNENCRYPTED) {
+		printf("\n");
+		b_echostr_s();
+		char *warnmsg = "[OTR] unencrypted message received from ";
+		printf("%s", warnmsg);
+		set_color(COLOR_INCOMING_IM);
+		printf("%s", context->username);
+		set_color(0);
+		printf(": ");
+
+	        char *tempmsg = strip_html(message);
+        	if (tempmsg == NULL)
+	                return;
+	        if (strlen(tempmsg) == 0) {
+	                free(tempmsg);
+	                return;
+	        }
+		char *msg = NULL;
+	        if (conn->netspeak_filter) {
+	                msg = undo_netspeak(tempmsg);
+	                free(tempmsg);
+	       	} else {
+	                msg = tempmsg;
+	        }
+
+	        if (msg == NULL)
+	                return;
+
+	        if (strlen(msg) == 0) {
+	                free(msg);
+	                return;
+	        }
+
+		wordwrap_print(msg, strlen(warnmsg) + strlen(context->username) + 2);
+		printf("\n");
+	}
 #endif
 	return;
 }
@@ -377,7 +414,6 @@ int otr_imcomm_im_send_message(const char *sn, const char *fullmsg) {
                                 } else if (newmsg != NULL) {
         				imcomm_im_send_message(conn->conn, sn, newmsg, 0);
                                         otrl_message_free(newmsg);
-					printf("[OTR DEBUG] %d\n", buddy->otr_context->msgstate);
 					if (buddy->otr_context->msgstate == OTRL_MSGSTATE_ENCRYPTED)
 						return(0);
 					else

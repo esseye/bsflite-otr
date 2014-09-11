@@ -41,7 +41,7 @@ getmessage(void *c, const char *who, const int automessage, const char *message)
 				if (ret) {
 #ifdef DEBUG
 					b_echostr_s();
-					printf("[OTR] Debug: internal msg %s\n", msgin);
+					printf("[OTR] debug: internal msg %s\n", msgin);
 #endif
 					return;
 				} else {
