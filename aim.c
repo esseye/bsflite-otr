@@ -37,7 +37,7 @@ getmessage(void *c, const char *who, const int automessage, const char *message)
 				char *newmsg;
 				int ret = otrl_message_receiving(userstate, &ui_ops, NULL, conn->username,
 								otr_proto, buddy->sn, msgin, &newmsg, NULL,
-								NULL, NULL, NULL);
+								&buddy->otr_context, NULL, NULL);
 				if (ret) {
 #ifdef DEBUG
 					b_echostr_s();
@@ -48,7 +48,8 @@ getmessage(void *c, const char *who, const int automessage, const char *message)
 					if (newmsg) {
 						msgin = strdup(newmsg);
 						otrl_message_free(newmsg);
-						otr_message = 1;
+	                                        if (buddy->otr_context->msgstate == OTRL_MSGSTATE_ENCRYPTED)
+							otr_message = 1;
 					}
 				}
 			}
@@ -152,9 +153,10 @@ getmessage(void *c, const char *who, const int automessage, const char *message)
 	set_color(COLOR_INCOMING_IM);
 	if (!otr_message)
 		printf("%s", who);
-	else
+	else {
 		offset += 5;
 		printf("(otr)%s", who);
+	}
 	set_color(0);
 	printf(": ");
 	wordwrap_print(msg, offset);

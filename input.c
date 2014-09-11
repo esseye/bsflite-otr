@@ -216,9 +216,10 @@ input_send_message(char *arg)
 	set_color(COLOR_OUTGOING_IM);
 	if (otr_message)
 		printf("->%s", sn);
-	else
+	else {
 		offset += 5;
 		printf("(otr)->%s", sn);
+	}
 	set_color(0);
 	printf(": ");
 	msg_strip = strip_html(msg);

@@ -377,6 +377,7 @@ int otr_imcomm_im_send_message(const char *sn, const char *fullmsg) {
                                 } else if (newmsg != NULL) {
         				imcomm_im_send_message(conn->conn, sn, newmsg, 0);
                                         otrl_message_free(newmsg);
+					printf("[OTR DEBUG] %d\n", buddy->otr_context->msgstate);
 					if (buddy->otr_context->msgstate == OTRL_MSGSTATE_ENCRYPTED)
 						return(0);
 					else
