@@ -65,6 +65,8 @@ parse_input(void)
 		{"o", 1, input_show_otr},
 		{"O", 1, input_stop_otr},
 		{"s", 1, input_send_smp_response},
+		{"S", 1, input_send_smp_request},
+		{"M", 1, input_manual_otr_verify},
 		{NULL, 0, NULL}
 	};
 
@@ -665,8 +667,59 @@ void input_show_otr(char *arg) {
         if (conn->conn == NULL)
                 return;
 
-        printf("\n");
-        check_key_gen_state();
+       	printf("\n");
+	if (strlen(arg) <= 0) {
+	        check_key_gen_state();
+		return;
+	} else {
+		b_echostr_s();
+		struct BuddyList *buddy = find_buddy(arg);
+		if (buddy) {
+			printf("[OTR] status for %s\n", arg);
+			printf("  local otr: ");
+			switch (buddy->otr) {
+				case -1:
+					printf("disabled\n");
+					break;
+				case 0:
+					printf("inactive\n");
+					break;
+				case 1:
+					printf("active\n");
+					break;
+				default:
+					printf("error\n");
+					break;
+			}
+			if (buddy->otr_context) {
+				if (buddy->otr_context->active_fingerprint) {
+				        char human_hash[OTRL_PRIVKEY_FPRINT_HUMAN_LEN];
+					otrl_privkey_hash_to_human(human_hash,
+						buddy->otr_context->active_fingerprint->fingerprint);
+				        int ret = otrl_context_is_fingerprint_trusted(buddy->otr_context->active_fingerprint);
+					printf("  fingerprint: %s (%s)\n", human_hash, ret ? "trusted" : "untrusted");
+				}
+				printf("  context state: ");
+				switch (buddy->otr_context->msgstate) {
+					case OTRL_MSGSTATE_ENCRYPTED:
+						printf("encrypted\n");
+						break;
+					case OTRL_MSGSTATE_PLAINTEXT:
+						printf("plaintext\n");
+						break;
+					case OTRL_MSGSTATE_FINISHED:
+						printf("finished\n");
+						break;
+					default:
+						printf("error\n");
+						break;
+				}
+			}
+		} else {
+			printf("[OTR] buddy not found %s\n", arg);
+		}
+		return;
+	}
 }
 
 void input_stop_otr(char *arg) {
@@ -728,3 +781,66 @@ void input_send_smp_response(char *arg) {
 	b_echostr_s();
 	printf("[OTR] No OTR context found for %s\n", sn);
 }
+
+void input_send_smp_request(char *arg) {
+        char *msg, *temp, *sn;
+
+        if (conn->conn == NULL)
+                return;
+
+        printf("\n");
+        temp = strchr(arg, ' ');
+
+        if (temp == NULL) {
+                b_echostr_s();
+                printf("No request to send.\n");
+                return;
+        }
+        if (strlen(temp + 1) == 0) {
+                b_echostr_s();
+                printf("No request to send.\n");
+                return;
+        }
+        msg = temp + 1;
+
+        sn = malloc(temp - arg + 1);
+        sn[temp - arg] = 0;
+        strncpy(sn, arg, temp - arg);
+
+        struct BuddyList *buddy = find_buddy(sn);
+        if (buddy) {
+                if (buddy->otr_context) {
+                        b_echostr_s();
+		}
+	}
+	b_echostr_s();
+	printf("[OTR] No OTR context found for %s\n", sn);
+}
+
+void input_manual_otr_verify(char *arg) {
+        char *msg, *temp, *sn;
+
+        if (conn->conn == NULL)
+                return;
+
+        printf("\n");
+        sn = arg;
+
+        struct BuddyList *buddy = find_buddy(sn);
+        if (buddy) {
+                if (buddy->otr_context) {
+		        char human_hash[OTRL_PRIVKEY_FPRINT_HUMAN_LEN];
+			otrl_privkey_hash_to_human(human_hash,
+				buddy->otr_context->active_fingerprint-> fingerprint);
+
+                        b_echostr_s();
+			otrl_context_set_trust(
+				buddy->otr_context->active_fingerprint,
+				"verified");
+			printf("[OTR] Manually trusting fingerprint %s from %s\n", human_hash, sn);
+                }
+        }
+        b_echostr_s();
+        printf("[OTR] No OTR context found for %s\n", sn);
+}
+

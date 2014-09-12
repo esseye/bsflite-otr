@@ -48,6 +48,8 @@ void            input_set_predefaway(char *arg);
 void            input_show_otr(char *arg);
 void            input_stop_otr(char *arg);
 void            input_send_smp_response(char *arg);
+void            input_send_smp_request(char *arg);
+void            input_manual_otr_verify(char *arg);
 ssize_t         bsf_getline(char *str, int size);
 void            input_reconnect(char *arg);
 int             open_log_dir(void);

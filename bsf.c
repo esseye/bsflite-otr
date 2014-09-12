@@ -274,7 +274,8 @@ main(void)
 					    (inputbuf[0] == 'm' || inputbuf[0] == 'i'
 					     || inputbuf[0] == 'l' || inputbuf[0] == 'A'
 					     || inputbuf[0] == 'P' || inputbuf[0] == 'p'
-					     || inputbuf[0] == 's' || inputbuf[0] == 'O'))
+					     || inputbuf[0] == 's' || inputbuf[0] == 'O'
+					     || inputbuf[0] == 'S' || inputbuf[0] == 'M'))
 						break;
 					else {
 						int             spaces = 0;
