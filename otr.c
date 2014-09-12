@@ -405,7 +405,7 @@ int otr_imcomm_im_send_message(const char *sn, const char *fullmsg) {
                                 err = otrl_message_sending(userstate, &ui_ops, NULL,
                                                         conn->username, otr_proto,
                                                         buddy->sn, OTRL_INSTAG_BEST,
-                                                        fullmsg, NULL, &newmsg, OTRL_FRAGMENT_SEND_SKIP,
+                                                        fullmsg, NULL, &newmsg, OTRL_FRAGMENT_SEND_ALL,
                                                         &buddy->otr_context, NULL, NULL);
                                 if (err) {
                                         b_echostr_s();
