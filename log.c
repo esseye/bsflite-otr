@@ -102,6 +102,16 @@ log_event(int event_type, char *sn, char *msg)
 	if (!logging)
 		return;
 
+        struct BuddyList *buddy = find_buddy(sn);
+        if (buddy) {
+	        if (buddy->otr_context) {
+			if (buddy->otr_context->msgstate ==
+				 OTRL_MSGSTATE_ENCRYPTED)
+				return;
+		}
+	}
+
+
 	if (conn->single_log)
 		snprintf(user_log, sizeof(user_log), "%s/log", logpath);
 	else
